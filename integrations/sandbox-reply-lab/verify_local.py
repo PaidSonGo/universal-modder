@@ -5,7 +5,6 @@ import sys
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from unittest.mock import patch
 import zipfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -38,11 +37,13 @@ class BridgeChecks(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "not built"):
                 bridge.inspect_archive(zip_bytes({"classes.dex": b"demo"}), "inventory", "apk", Path(d))
 
-    def test_does_not_accept_bad_token(self):
-        bridge.Handler.token = "correct-test-token"
-        class H:
+    def test_token_must_match(self):
+        class FakeRequest:
+            token = "correct-test-token"
             headers = {"X-Sandbox-Token": "wrong"}
-        self.assertFalse(bridge.Handler.authorized(H()))
+        self.assertFalse(bridge.Handler.authorized(FakeRequest()))
+        FakeRequest.headers = {"X-Sandbox-Token": "correct-test-token"}
+        self.assertTrue(bridge.Handler.authorized(FakeRequest()))
 
 
 if __name__ == "__main__":
