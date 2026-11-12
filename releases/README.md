@@ -1,0 +1,1 @@
+# Sandbox Reply Lab debug APK\n\nPackage: pl.sandboxreplylab, version 0.5.1, CI debug build from GitHub Actions run 43197335519.\nSHA-256: b81e3fce7363d73efff1b04d7cf1c7845586745861972f0fc57ac32c06fc6dc3\nTest only. Debug signing may change between CI runs. Not a verified retail release.\n
