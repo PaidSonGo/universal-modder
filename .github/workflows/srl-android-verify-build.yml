@@ -31,7 +31,13 @@ jobs:
           tar -xJf apps/sandbox-reply-lab/source.tar.xz -C .srl-src
       - name: Prepare Android SDK
         run: |
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          export ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          export ANDROID_SDK_ROOT="$ANDROID_HOME"
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n 1)"
+          test -n "$SDKMANAGER"
+          "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0"
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> "$GITHUB_ENV"
       - name: Assemble APK
         run: gradle -p .srl-src :app:assembleDebug --stacktrace --no-daemon
       - name: Check APK contents
