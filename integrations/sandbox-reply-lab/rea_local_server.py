@@ -54,7 +54,7 @@ def inspect_archive(raw: bytes, mode: str, kind: str, root: Path) -> dict:
         archive.write_bytes(raw)
         cmd = ["node", str(cli),
                "inspect-artifact" if mode == "inventory" else "inspect-android-package",
-               str(archive), "--json"]
+               str(archive), "--format", "json"]
         try:
             result = subprocess.run(cmd, cwd=root, capture_output=True,
                                     timeout=120, check=False)
