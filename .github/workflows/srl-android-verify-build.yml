@@ -26,7 +26,7 @@ jobs:
           gradle-version: '8.9'
       - name: Verify and unpack exact source snapshot
         run: |
-          echo "4d8ff944f4798f972af78de35c6d17edac2c4f6482e2444e475064fa82e7b461  apps/sandbox-reply-lab/source.tar.xz" | sha256sum --check
+          echo "884eb08ee241d01b9e67c8887160c64727af8a5629753bec6e3b1ad367b848ce  apps/sandbox-reply-lab/source.tar.xz" | sha256sum --check
           mkdir -p .srl-src
           tar -xJf apps/sandbox-reply-lab/source.tar.xz -C .srl-src
       - name: Prepare Android SDK
@@ -48,7 +48,7 @@ jobs:
       - name: Upload test APK
         uses: actions/upload-artifact@v4
         with:
-          name: SandboxReplyLab-v0.5.1-debug-APK
+          name: SandboxReplyLab-v0.5.2-debug-APK
           path: .srl-src/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14

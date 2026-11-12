@@ -1,11 +1,5 @@
-# Sandbox Reply Lab Android build
+# Sandbox Reply Lab 0.5.2 — test build
 
-This project is an offline APK/XAPK static inspector with a local authenticated REA bridge for Termux and an optional, consent-based debug memory target for software you control.
-
-Android sources are currently stored as a **SHA-256 verified source archive** (source.tar.xz). Workflow srl-android-verify-build.yml unpacks them in the CI runner and builds a debug APK.
-
-SHA-256: 4d8ff944f4798f972af78de35c6d17edac2c4f6482e2444e475064fa82e7b461
-
-The upstream REA 6.4.0 engine is **not** bundled in the APK. It runs locally in the separate Termux process at 127.0.0.1:18767 (see integrations/sandbox-reply-lab).
-
-This is a test/debug build. Android signing credentials are runner-generated and cannot be assumed stable across separate CI runs. No claim of Android device runtime verification is made until installed and tested.
+Source snapshot: source.tar.xz\nSHA-256: 884eb08ee241d01b9e67c8887160c64727af8a5629753bec6e3b1ad367b848ce\n
+Android 8+, Android Gradle Plugin 8, JDK17, Android SDK35. REA 6.4.0 is a separately installed Termux process on localhost port 18767. Tool restricts editing memory to cooperating debug processes. The APK classifier matches identifier boundaries to avoid false positive substrings such as gem within Arrangement or ads within readSet.\n
+Compile via .github/workflows/srl-android-verify-build.yml. Test APK uses debug signing which may change across CI runs. Not verified on a physical phone.\n
