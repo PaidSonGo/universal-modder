@@ -5,6 +5,7 @@ import sys
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from unittest.mock import patch
 import zipfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -44,6 +45,24 @@ class BridgeChecks(unittest.TestCase):
         self.assertFalse(bridge.Handler.authorized(FakeRequest()))
         FakeRequest.headers = {"X-Sandbox-Token": "correct-test-token"}
         self.assertTrue(bridge.Handler.authorized(FakeRequest()))
+
+    def test_invokes_rea_with_supported_json_format(self):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "scripts").mkdir()
+            (root / "scripts/rea.mjs").write_text("// test")
+            (root / "dist/cli-runtime").mkdir(parents=True)
+            (root / "dist/cli-runtime/cli.js").write_text("// test")
+            class Completed:
+                returncode = 0
+                stdout = b'{"ok":true}'
+                stderr = b""
+            with patch.object(bridge.subprocess, "run", return_value=Completed()) as command:
+                result = bridge.inspect_archive(
+                    zip_bytes({"classes.dex": b"dex\n035\0"}), "inventory", "apk", root
+                )
+                self.assertTrue(result["ok"])
+                self.assertEqual(command.call_args.args[0][-2:], ["--format", "json"])
 
 
 if __name__ == "__main__":
