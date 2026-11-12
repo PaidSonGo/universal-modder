@@ -1,0 +1,32 @@
+name: Sandbox Reply Lab Termux bridge checks
+
+on:
+  pull_request:
+    paths:
+      - 'integrations/sandbox-reply-lab/**'
+      - '.github/workflows/srl-termux-bridge.yml'
+  push:
+    branches:
+      - feature/sandbox-reply-lab-termux
+    paths:
+      - 'integrations/sandbox-reply-lab/**'
+      - '.github/workflows/srl-termux-bridge.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate shell syntax
+        run: bash -n integrations/sandbox-reply-lab/setup_termux.sh
+      - name: Validate local bridge
+        run: |
+          python -m py_compile integrations/sandbox-reply-lab/rea_local_server.py
+          python integrations/sandbox-reply-lab/verify_local.py -v
